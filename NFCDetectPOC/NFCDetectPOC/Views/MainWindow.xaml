@@ -1,0 +1,90 @@
+﻿<Window x:Class="NFCDetectPOC.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NFCDetectPOC.Views"
+        xmlns:localVMs="clr-namespace:NFCDetectPOC.ViewModels"
+        xmlns:localModels="clr-namespace:NFCDetectPOC.Models"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
+        md:DialogServiceViews.IsRegistered="True"
+        mc:Ignorable="d"
+        Title="{Binding Title}" Height="350" Width="525"
+        DataContext="{Binding localVMs.MainViewModel}"
+        WindowState="Normal">
+
+    <Window.InputBindings>
+        <!-- Example of Keyboard shortcuts -->
+
+        <KeyBinding Command="{Binding RefreshDevices}" Gesture="Ctrl+N" />
+        <KeyBinding Command="{Binding ExitCmd}" Gesture="Alt+F4" />
+    </Window.InputBindings>
+
+    <DockPanel LastChildFill="True">
+        <!-- File Menu -->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Refresh Devices" Command="{Binding RefreshDevices}" InputGestureText="Ctrl+R" />
+                <Separator />
+                <MenuItem Header="Exit" Command="{Binding ExitCmd}" InputGestureText="Alt+F4"/>
+            </MenuItem>
+        </Menu>
+
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Total Devices Connected:" FontSize="17" HorizontalAlignment="Left"></Label>
+                <Label Content="{Binding DevicesCount}" FontSize="17" HorizontalAlignment="Stretch" Width="Auto"></Label>
+            </StackPanel>
+            <!-- selected item data -->
+            <ListBox
+                     x:Name="ItemsListBox"
+                     ItemsSource="{Binding DevicesList}"
+                     BorderThickness="0" Height="302">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Style.Setters>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Border CornerRadius="5" BorderBrush="#051B32" BorderThickness="2" Margin="5" Padding="4">
+                                            <Grid Margin="0,0,0,10" Focusable="False">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+                                                <!-- token -->
+                                                <StackPanel Grid.Row="1"
+                                                        Orientation="Horizontal"
+                                                        Visibility="Visible">
+                                                    <TextBlock Text="Device Name: " FontSize="14"/>
+                                                    <TextBlock Text="{Binding DeviceName}" FontSize="14" Foreground="#FFEF5434"/>
+                                                </StackPanel>
+                                                <StackPanel Grid.Row="2"
+                                                        Orientation="Horizontal"
+                                                        Visibility="Visible">
+                                                    <TextBlock Text="Device Address: " FontSize="14"/>
+                                                    <TextBlock Text="{Binding DeviceAddress}" FontSize="14" Foreground="#FFEF5434"/>
+                                                </StackPanel>
+                                                <StackPanel Grid.Row="3"
+                                                        Orientation="Horizontal"
+                                                        Visibility="Visible">
+                                                    <TextBlock Text="Device Manufacturer: " FontSize="14"/>
+                                                    <TextBlock Text="{Binding DeviceManufac}" FontSize="14" Foreground="#FFEF5434"/>
+                                                </StackPanel>
+                                            </Grid>
+                                            
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style.Setters>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </StackPanel>
+    </DockPanel>
+</Window>
