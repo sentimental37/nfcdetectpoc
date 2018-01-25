@@ -15,12 +15,13 @@ using System.Xml.Linq;
 using NFCDetectPOC.Views;
 using NFCDetectPOC.Utils;
 using NFCDetectPOC.Models;
+using NFCDetectPOC.Helpers;
 
 namespace NFCDetectPOC.ViewModels
 {
     class MainViewModel : ViewModelBase
     {
-        #region Parameters
+        #region Properties
         private readonly IDialogService DialogService;
         List<NFCDevice> devicesList = new List<NFCDevice>();
 
@@ -57,31 +58,28 @@ namespace NFCDetectPOC.ViewModels
         #region Constructors
         public MainViewModel()
         {
-            // DialogService is used to handle dialogs
             this.DialogService = new MvvmDialogs.DialogService();
-            devicesList.Add(new NFCDevice() { ID = 1, DeviceName = "Device1", DeviceManufac = "VISHAL", DeviceAddress = "8908080" });
-            devicesList.Add(new NFCDevice() { ID = 2, DeviceName = "Device2", DeviceManufac = "VISHAL", DeviceAddress = "8908080" });
-            devicesList.Add(new NFCDevice() { ID = 3, DeviceName = "Device3", DeviceManufac = "VISHAL", DeviceAddress = "8908080" });
-
-
         }
 
         #endregion
 
         #region Methods
-
-        #endregion
-
-        #region Commands
-
-        public ICommand RefreshDevices { get { return new RelayCommand(OnRefreshDevices); } }
-
-        public ICommand ExitCmd { get { return new RelayCommand(OnExitApp); } }
-
-
         private void OnRefreshDevices()
         {
-            // TODO
+            try
+            {
+                DevicesList = NFCWMQHelper.GetConnectedDevices();
+                NotifyPropertyChanged("DevicesCount");
+                if (DevicesList.Count == 0)
+                {
+                    DialogService.ShowMessageBox(this, "No Device Connected.Try Again after connecting a device.", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
         }
 
         private void OnExitApp()
@@ -90,7 +88,11 @@ namespace NFCDetectPOC.ViewModels
         }
         #endregion
 
-        #region Events
+        #region Commands
+
+        public ICommand RefreshDevices { get { return new RelayCommand(OnRefreshDevices); } }
+
+        public ICommand ExitCmd { get { return new RelayCommand(OnExitApp); } }
 
         #endregion
     }

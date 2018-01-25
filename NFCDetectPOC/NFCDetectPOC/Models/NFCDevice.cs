@@ -61,12 +61,12 @@ namespace NFCDetectPOC.Models
         {
             get
             {
-                return _DeviceAddress;
+                return _DeviceManufac;
             }
 
             set
             {
-                _DeviceAddress = value;
+                _DeviceManufac = value;
                 NotifyPropertyChanged();
             }
         }
